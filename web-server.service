@@ -1,0 +1,13 @@
+[Unit]
+Description=Go Web Server
+Wants=network-online.target
+After=nginx.service
+
+[Service]
+#Type=simple # default
+# Ejecute pwd, copie el resultado en ExecStart. Acto seguido, agregue el nombre del binario al final
+ExecStart=
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
