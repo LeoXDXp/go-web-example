@@ -1,7 +1,9 @@
+# Doc: https://www.freedesktop.org/software/systemd/man/systemd.service.html
 [Unit]
 Description=Go Web Server
 Wants=network-online.target
-After=nginx.service
+# En que orden debe ir con respecto a los otros servicios/demonios?
+After=
 
 [Service]
 #Type=simple # default
