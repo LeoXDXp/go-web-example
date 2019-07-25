@@ -36,7 +36,7 @@ func headers(w http.ResponseWriter, req *http.Request) {
 }
 
 func index(w http.ResponseWriter, req *http.Request) {
-	fmt.Fprintf(w, "Puede revisar \\hello o \\headers \n")
+	fmt.Fprintf(w, "Puede revisar /hello o /headers \n")
 }
 
 func main() {
