@@ -8,24 +8,27 @@
 /* This program requests chuncks of memory, until the real amount of available 
  * memory is surpased, and the OOM Killer is called*/
 int main(int arc, char**argv){
-    int i, counter = 1; 
+    int i, j, counter = 1, size = 1024 * 1024 * 1024; 
     char *allocate;
     srand(time(NULL));
 
     /* increase request in chuncks of 1 GB each time */
-    for (i = 0; i < 12; i++){
-	allocate = malloc(sizeof(char) * 1024 * 1024 * 1024 * counter);
+    for (i = 1; i < 20; i++){
+	allocate = malloc(sizeof(char) * size * counter);
     	if (allocate){
 	    printf("allocated %d GB\n", i);
-	    memset(allocate, 1, sizeof(char) * 1024 * 1024 * 1024 * counter);
-	    printf("Filled %d GB with 1s\n", i);
+	    for (j = 0; j < strlen(allocate)-1; j++)
+		allocate[j] = 'a';
+	    //memset(allocate, 5, sizeof(int) * size * counter);
+	    printf("Filled %d GB with 5s\n", i);
 	    /* release memory. Comment this line if you want to freeze/slow down your computer. Reboot probably required */  
 	    free(allocate);
-	    /* Add some randomness to the failure */
-	    sleep(rand()%5);
+	    printf("Freed %d GB\n", i);
 	} else { // Error Handling. Very important
 	    printf("Out of memory\n");
 	}
+	/* Add some randomness to the failure */
+	//sleep(rand()%5);
     }
     return 0;
 }
