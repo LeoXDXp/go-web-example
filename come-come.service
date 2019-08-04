@@ -1,0 +1,20 @@
+# Doc: https://www.freedesktop.org/software/systemd/man/systemd.resource-control.html
+[Unit]
+Description= ComeCome as a service/daemon
+Wants=network-online.target
+# En que orden debe ir con respecto a los otros servicios/demonios?
+After=
+
+[Service]
+#Type=simple # default
+ExecStart=
+Restart=no
+# Enviar un email. Avisar al LB, o activar otra instancia
+ExecStopPost=
+MemoryAccounting=true
+# Usar K,M o G como unidades
+MemoryHigh=
+MemoryMax=
+
+[Install]
+WantedBy=multi-user.target
