@@ -4,7 +4,7 @@
 #include <unistd.h> // sleep
 #include <time.h> 
 
-// gcc comecome.c -o comecome
+// gcc comecome.c -o comecome -Wall -pedantic
 /* This program requests chuncks of memory, until the real amount of available 
  * memory is surpased, and the OOM Killer is called*/
 int main(int arc, char**argv){
