@@ -1,4 +1,5 @@
-FROM fedora:latest # ubuntu, alpine, wintendo
+FROM fedora:latest 
+# ubuntu, alpine, wintendo
 MAINTAINER leonardo.pizarro@usm.cl
 # Debug
 ENV HANDLER 'echo build failed. You can debug this container by running \`docker exec -it THIS_CONTAINER_ID sh\`. \(available for 5 min\); sleep 300'
