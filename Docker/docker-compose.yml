@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile-basic
     #image: ip:puerto/owner/nombre-imagen 
     #image: 10.200.11.28:5555/leo/fFilters
-    #image: alpine
+    #image: docker_go-web-example
     ports:
       - "5001:8090" 
       # 5001:8090/tcp
