@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 services:
 
   go-web-example:
@@ -17,12 +17,12 @@ services:
     - test.mti.cl:204.87.169.161
     environment:
     - STAGE=DEV
-    deploy:
-      replicas: 3
-      update_config:
-        parallelism: 2
-        delay: 10s
-      restart_policy:
-        condition: on-failure
+    #deploy:
+    #  replicas: 3
+    #  update_config:
+    #    parallelism: 2
+    #    delay: 10s
+    #  restart_policy:
+    #    condition: on-failure
     #labels:
       #io.rancher.container.pull_image: always
