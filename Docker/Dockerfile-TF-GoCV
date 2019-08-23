@@ -11,8 +11,8 @@ RUN dnf install -y git golang curl ffmpeg-devel gstreamer1-plugins-base-devel gs
 # Go binary 
 RUN mkdir -p /var/www/ && git clone https://github.com/LeoXDXp/go-web-example.git -b part4 /var/www/go-web-example
 # Go get libraries
-go get github.com/tensorflow/tensorflow/tensorflow/go
-go get -u -d gocv.io/x/gocv
+RUN go get github.com/tensorflow/tensorflow/tensorflow/go
+RUN go get -u -d gocv.io/x/gocv
 
 #Copy tensorflow.so && opencv pre-compiled
 COPY /home/guest/libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz /opt/
@@ -35,7 +35,7 @@ RUN go run go/src/gocv.io/x/gocv/cmd/version/main.go
 RUN cd /var/www/go-web-example && go build http-server.go
 RUN ln -s /var/www/go-web-example/http-server /usr/local/bin/
 
-EXPOSE 80
+EXPOSE 8090
 
 # Start 
 CMD ["http-server"]
