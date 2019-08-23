@@ -1,0 +1,28 @@
+version: '3'
+services:
+
+  go-web-example:
+    build: . #Ruta al contexto
+    #  context: .
+    #  dockerfile: Dockerfile-2
+    #image: ip:puerto/owner/nombre-imagen 
+    #image: 10.200.11.28:5555/leo/fFilters
+    #image: alpine
+    ports:
+      - "5001:8090" 
+      # 5001:8090/tcp
+    #depends_on:
+    #  - otro container
+    extra_hosts:
+    - test.mti.cl:204.87.169.161
+    environment:
+    - STAGE=DEV
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+    #labels:
+      #io.rancher.container.pull_image: always
