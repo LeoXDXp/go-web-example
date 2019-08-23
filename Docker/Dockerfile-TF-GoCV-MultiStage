@@ -3,7 +3,7 @@ MAINTAINER leonardo.pizarro@usm.cl
 # Debug
 ENV HANDLER 'echo build failed. You can debug this container by running \`docker exec -it THIS_CONTAINER_ID sh\`. \(available for 5 min\); sleep 300'
 # Agregue los paquetes necesarios
-RUN dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm && dnf install -y git curl golang ffmpeg-devel gstreamer1-plugins-base-devel gstreamer1-devel gstreamer1-plugins-bad gstreamer1-plugins-good gstreamer-ffmpeg gstreamer-rtsp gcc cmake gtk2-devel libpng-devel libjpeg-devel libtiff-devel tbb tbb-devel libdc1394-devel unzip  && dnf clean all|| sh -c "$HANDLER"
+RUN dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm && dnf install -y git curl golang ffmpeg-devel gstreamer1-plugins-base-devel gstreamer1-devel gstreamer1-plugins-bad-free gstreamer1-plugins-good gstreamer-ffmpeg gstreamer-rtsp gcc cmake gtk2-devel libpng-devel libjpeg-devel libtiff-devel tbb tbb-devel libdc1394-devel unzip  && dnf clean all|| sh -c "$HANDLER"
 
 # Go binary 
 RUN mkdir -p /var/www/ && git clone https://github.com/LeoXDXp/go-web-example.git -b part4 /var/www/go-web-example
