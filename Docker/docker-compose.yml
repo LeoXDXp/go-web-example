@@ -2,9 +2,9 @@ version: '3'
 services:
 
   go-web-example:
-    build: . #Ruta al contexto
-    #  context: .
-    #  dockerfile: Dockerfile-2
+    build: #Ruta al contexto
+      context: ../
+      dockerfile: Dockerfile-basic
     #image: ip:puerto/owner/nombre-imagen 
     #image: 10.200.11.28:5555/leo/fFilters
     #image: alpine
