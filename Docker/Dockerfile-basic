@@ -7,7 +7,7 @@ ENV HANDLER 'echo build failed. You can debug this container by running \`docker
 RUN dnf install -y golang git && dnf clean all || sh -c "$HANDLER"
 
 # Go binary 
-RUN mkdir -p /var/www/ && RUN git clone https://github.com/LeoXDXp/go-web-example.git -b master /var/www/go-web-example
+RUN mkdir -p /var/www/ && git clone https://github.com/LeoXDXp/go-web-example.git -b master /var/www/go-web-example
 RUN cd /var/www/go-web-example && go build http-server.go
 RUN ln -s /var/www/go-web-example/http-server /usr/local/bin/
 

@@ -8,7 +8,7 @@ RUN rpm -v --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
 RUN dnf install -y git curl golang ffmpeg-devel gstreamer1-plugins-base-devel gstreamer1-devel gstreamer1-plugins-bad gstreamer1-plugins-good gstreamer-ffmpeg gstreamer-rtsp gcc cmake gtk2-devel libpng-devel libjpeg-devel libtiff-devel tbb tbb-devel libdc1394-devel unzip  && dnf clean all|| sh -c "$HANDLER"
 
 # Go binary 
-RUN mkdir -p /var/www/ && RUN git clone https://github.com/LeoXDXp/go-web-example.git -b part4 /var/www/go-web-example
+RUN mkdir -p /var/www/ && git clone https://github.com/LeoXDXp/go-web-example.git -b part4 /var/www/go-web-example
 # Go get libraries
 go get github.com/tensorflow/tensorflow/tensorflow/go
 go get -u -d gocv.io/x/gocv
