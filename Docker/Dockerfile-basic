@@ -1,0 +1,14 @@
+FROM fedora:latest # ubuntu, alpine, wintendo
+MAINTAINER leonardo.pizarro@usm.cl
+# Debug
+ENV HANDLER 'echo build failed. You can debug this container by running \`docker exec -it THIS_CONTAINER_ID sh\`. \(available for 5 min\); sleep 300'
+# Agregue los paquetes necesarios
+RUN dnf install -y golang git && dnf clean all || sh -c "$HANDLER"
+
+# Go binary 
+RUN mkdir -p /var/www/ && RUN git clone https://github.com/LeoXDXp/go-web-example.git /var/www/go-web-example
+RUN cd /var/www/go-web-example && go build http-server.go
+RUN ln -s /var/www/go-web-example/http-server /usr/local/bin/
+
+# Start 
+CMD ["http-server"]

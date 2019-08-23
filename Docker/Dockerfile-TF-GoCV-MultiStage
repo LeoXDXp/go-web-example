@@ -1,0 +1,52 @@
+FROM fedora:latest AS builder
+MAINTAINER leonardo.pizarro@usm.cl
+# Debug
+ENV HANDLER 'echo build failed. You can debug this container by running \`docker exec -it THIS_CONTAINER_ID sh\`. \(available for 5 min\); sleep 300'
+# Repo nux
+RUN rpm -v --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+# Agregue los paquetes necesarios
+RUN dnf install -y git curl golang ffmpeg-devel gstreamer1-plugins-base-devel gstreamer1-devel gstreamer1-plugins-bad gstreamer1-plugins-good gstreamer-ffmpeg gstreamer-rtsp gcc cmake gtk2-devel libpng-devel libjpeg-devel libtiff-devel tbb tbb-devel libdc1394-devel unzip  && dnf clean all|| sh -c "$HANDLER"
+
+# Go binary 
+RUN mkdir -p /var/www/ && RUN git clone https://github.com/LeoXDXp/go-web-example.git /var/www/go-web-example
+# Go get libraries
+go get github.com/tensorflow/tensorflow/tensorflow/go
+go get -u -d gocv.io/x/gocv
+
+#Copy tensorflow.so && opencv pre-compiled
+COPY /home/guest/libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz /opt/
+COPY /opt/opencv/ /opt/ 
+
+# Export LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH /usr/local/lib:/usr/local/lib64/
+ENV PKG_CONFIG_PATH /usr/local/lib64/pkgconfig/
+
+# Uncompress libtensorflow.so
+RUN tar -C /usr/local xzvf /opt/libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz
+# make install Opencv 4.1
+RUN cd /opt/opencv/opencv-4.1.0/build && make install
+
+# Test tensorflow
+RUN go test github.com/tensorflow/tensorflow/tensorflow/go
+# Test GoCV
+RUN go run go/src/gocv.io/x/gocv/cmd/version/main.go
+# Build http-server
+RUN cd /var/www/go-web-example && go build http-server.go
+
+
+FROM fedora:latest # ubuntu, alpine, wintendo
+MAINTAINER leonardo.pizarro@usm.cl
+
+#WORKDIR /var/www/go-web-example/
+COPY --from=builder /usr/local /usr/
+COPY --from=builder /var/www/go-web-example/http-server /usr/local/bin/
+
+ENV LD_LIBRARY_PATH /usr/local/lib:/usr/local/lib64/
+ENV PKG_CONFIG_PATH /usr/local/lib64/pkgconfig/
+
+RUN 
+
+EXPOSE 80
+
+# Start 
+CMD ["http-server"]
