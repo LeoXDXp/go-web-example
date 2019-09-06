@@ -6,14 +6,15 @@ ENV HANDLER 'echo build failed. You can debug this container by running \`docker
 RUN dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm && dnf install -y git curl golang ffmpeg-devel gstreamer1-plugins-base-devel gstreamer1-devel gstreamer1-plugins-bad-free gstreamer1-plugins-good gstreamer-ffmpeg gstreamer-rtsp gcc cmake gtk2-devel libpng-devel libjpeg-devel libtiff-devel tbb tbb-devel libdc1394-devel unzip  && dnf clean all|| sh -c "$HANDLER"
 
 # Go binary 
-RUN mkdir -p /var/www/ && git clone https://github.com/LeoXDXp/go-web-example.git -b part4 /var/www/go-web-example
+RUN mkdir -p /var/www/ && git clone https://github.com/LeoXDXp/go-web-example.git -b part5 /var/www/go-web-example
 # Go get libraries
 RUN go get github.com/tensorflow/tensorflow/tensorflow/go && go get -u -d gocv.io/x/gocv
 
 #Copy tensorflow.so && opencv pre-compiled
 COPY /home/guest/libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz /opt/
 COPY /opt/opencv/ /opt/ 
-
+# COCO Pretrained model
+RUN cd /opt/ && wget http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v1_coco_11_06_2017.tar.gz && tar xzvf ssd_mobilenet_v1_coco_11_06_2017.tar.gz
 # Export LD_LIBRARY_PATH
 ENV LD_LIBRARY_PATH /usr/local/lib:/usr/local/lib64/
 ENV PKG_CONFIG_PATH /usr/local/lib64/pkgconfig/
@@ -21,27 +22,26 @@ ENV PKG_CONFIG_PATH /usr/local/lib64/pkgconfig/
 # Uncompress libtensorflow.so
 RUN tar -C /usr/local xzvf /opt/libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz
 # make install Opencv 4.1
-RUN cd /opt/opencv/opencv-4.1.0/build && make install
+#RUN cd /opt/opencv/opencv-4.1.0/build && make install
 
 # Test tensorflow
 RUN go test github.com/tensorflow/tensorflow/tensorflow/go
 # Test GoCV
-RUN go run go/src/gocv.io/x/gocv/cmd/version/main.go
+#RUN go run go/src/gocv.io/x/gocv/cmd/version/main.go
 # Build http-server
 RUN cd /var/www/go-web-example && go build http-server.go
 
-
-FROM fedora:latest # ubuntu, alpine, wintendo
+FROM fedora:latest
 MAINTAINER leonardo.pizarro@usm.cl
 
 #WORKDIR /var/www/go-web-example/
 COPY --from=builder /usr/local /usr/
 COPY --from=builder /var/www/go-web-example/http-server /usr/local/bin/
+COPY --from=builder /opt/ssd_mobilenet_v1_coco_11_06_2017/ /opt/
 
 ENV LD_LIBRARY_PATH /usr/local/lib:/usr/local/lib64/
 ENV PKG_CONFIG_PATH /usr/local/lib64/pkgconfig/
 
-EXPOSE 8090
-
+EXPOSE 8091
 # Start 
 CMD ["http-server"]
